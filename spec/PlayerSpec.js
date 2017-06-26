@@ -10,7 +10,7 @@ describe("Player", function() {
   var board
   var timer = TIMER_TIME
   beforeEach(function() {
-    player = new Player(id, name, time);
+    player = new Player(id, name, timer);
   })
 
   describe("constructor function", function () {
@@ -18,12 +18,12 @@ describe("Player", function() {
       expect(Player.length).toEqual(3);
     });
 
-    it("should receive the width property as its 1st argument", function () {
-      expect(player.width).toEqual(width);
+    it("should receive the id property as its 1st argument", function () {
+      expect(player.id).toEqual(id);
     })
 
-    it("should receive the height property as its 1st argument", function () {
-      expect(player.height).toEqual(height);
+    it("should receive the name property as its 1st argument", function () {
+      expect(player.name).toEqual(name);
     })
 
     it("should receive the timer property as its 1st argument", function () {
@@ -34,7 +34,7 @@ describe("Player", function() {
   describe("initializes board", function () {
     var board
     beforeEach(function() {
-      board = new Board (10, 10);
+      board = new Board (3, 3);
     })
 
     it("should have a board to play", function () {
@@ -49,7 +49,7 @@ describe("Player", function() {
   describe("answering the pattern", function() {
     beforeEach(function() {
       player.score = 0
-      player.time = TIME
+      player.time = TIMER_TIME
     });
 
     it("should answer the pattern", function() {
@@ -61,19 +61,19 @@ describe("Player", function() {
 
 
     it("should indicate that the player has matched the right pattern", function() {
-      player.answer = true
+      player.patternAnswear = true
 
       expect(player.rightAnswear()).toEqual(true)
-      expect(player.score()).toEqual(10)
-      expect(player.time()).toEqual(TIME + 5)
+      expect(player.score).toEqual(10)
+      expect(player.timer).toEqual(TIMER_TIME + 5 * 1000)
     })
 
     it("should indicate that the player has matched the wrong pattern", function() {
-      player.answer = false
+      player.patternAnswear = false
 
       expect(player.rightAnswear()).toEqual(false)
-      expect(player.score()).toEqual(10)
-      expect(player.time()).toEqual(TIME - 5)
+      expect(player.score).toEqual(0)
+      expect(player.timer).toEqual(TIMER_TIME - 5 * 1000)
     })
   })
 
@@ -83,7 +83,7 @@ describe("Player", function() {
     })
 
     it("should indicate that player has finnished its game", function() {
-      player.timeUp(player1).toEqual(true)
+      expect(player.timeUp()).toEqual(true)
     })
   })
 })

@@ -27,20 +27,17 @@ describe("Game", function() {
     })
   })
 
-  describe("players added to the game", function () {
-    it("players have been added to the game", function() {
-      spyOn(game, 'addPlayer');
+  describe("players", function () {
+    it("should have been added to the game", function() {
 
       game.addPlayer(player1)
       game.addPlayer(player2)
-
-      expect(game.addPlayer).toHaveBeenCalled()
 
       expect(game.playersArray.length).toEqual(2)
     })
   })
 
-  describe("game has been initialized", function() {
+  describe("initialized", function() {
     beforeEach(function() {
       game.initializeGame()
     })
@@ -50,25 +47,23 @@ describe("Game", function() {
     })
 
     it("should indicate that the player 1 has the turn", function() {
-      spyOn(game, 'setTurn');
-
       game.setTurn(player1)
-      expect(game.setTurn).toHaveBeenCalled()
-      expect(game.whoseTurn).toEqual('Player1')
+      expect(game.whoseTurn()).toEqual('Player1')
     })
   })
 
-    describe("player has switched the turn", function() {
+    describe("turn", function() {
       beforeEach(function() {
-        game.chageTurn()
+        game.addPlayer(player1)
+        game.addPlayer(player2)
+        game.setTurn(player1)
+
       });
 
       it("should indicate that the turn has been changed", function() {
-        spyOn(game, 'switchTurn');
-
         game.setTurn(player1)
-        expect(game.switchTurn).toHaveBeenCalled()
-        expect(game.whoseTurn).toEqual('Player2')
+        expect(game.switchTurn())
+        expect(game.whoseTurn()).toEqual('Player2')
       })
     })
 
@@ -78,11 +73,14 @@ describe("Game", function() {
         player2.timer = 0
         player1.score = 150
         player2.score = 250
+
+        game.addPlayer(player1)
+        game.addPlayer(player2)
       });
 
       it("should indicate that player 2 has won the game", function() {
         game.whoWon()
-        expect(game.winner).toEqual('Player2')
+        expect(game.winner.name).toEqual('Player2')
       })
     })
 })
