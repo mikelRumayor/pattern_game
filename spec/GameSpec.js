@@ -1,16 +1,20 @@
 var Game  = require('../js/Game.js')
 var Player = require('../js/Player.js')
 
+var TIMER_TIME =  60 * 1000
+var GRID = 3
+
 describe("Game", function() {
   var game
-  var timer = 6 * 1000
+  var timer = TIMER_TIME
   var player1
   var player2
+  var winner
 
   beforeEach(function() {
     game = new Game(timer);
-    player1 = new Player(0, 'Player1')
-    player2 = new Player(1, 'Player2')
+    player1 = new Player(0, 'Player1', timer)
+    player2 = new Player(1, 'Player2', timer)
   })
 
   describe("constructor function", function () {
@@ -42,7 +46,7 @@ describe("Game", function() {
     })
 
     it("should indicate that the game been restarted", function() {
-      expect(game.isWinner).toBeFalsy()
+      expect(game.winner).toBeFalsy()
     })
 
     it("should indicate that the player 1 has the turn", function() {
@@ -65,6 +69,20 @@ describe("Game", function() {
         game.setTurn(player1)
         expect(game.switchTurn).toHaveBeenCalled()
         expect(game.whoseTurn).toEqual('Player2')
+      })
+    })
+
+    describe("game has finnished", function() {
+      beforeEach(function() {
+        player1.timer = 0
+        player2.timer = 0
+        player1.score = 150
+        player2.score = 250
+      });
+
+      it("should indicate that player 2 has won the game", function() {
+        game.whoWon()
+        expect(game.winner).toEqual('Player2')
       })
     })
 })
