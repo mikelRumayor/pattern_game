@@ -19,7 +19,8 @@ Game.prototype.initializeGame = function () {
 Game.prototype.setTurn = function (player) {
   this.turn = player
   this.turn.startPlaying()
-  this.checkTimeUp()
+  // TODO activte to play
+  // this.checkTimeUp()
 }
 
 Game.prototype.whoseTurn = function (){
@@ -32,7 +33,6 @@ Game.prototype.switchTurn = function (){
         this.turn = player
       }
   }.bind(this))
-  alert('wsi')
   this.turn.startPlaying()
   this.checkTimeUp()
 }

@@ -23,7 +23,6 @@ Board.prototype.generatePattern = function () {
   var patternElement = Math.floor(Math.random() * (this.width * this.height))
   patternIndexes.push(patternElement)
 
-
   for(var i = 0; i <= randomElements - 1; i++) {
     var valid = true
     do{
@@ -89,6 +88,35 @@ Board.prototype.generatePattern = function () {
 
 }
 
+Board.prototype.drawPatternInGrid = function () {
+  this.generatePattern()
+
+  // this.pattern = [0, 4, 1]
+  console.log(this.pattern)
+  this.pattern.map(function (pointer, i) {
+    document.querySelectorAll('div[attr-id]')[pointer].style.opacity = 1
+    if (i < this.pattern.length - 1 ) {
+      console.log( document.querySelectorAll('div[attr-id]')[pointer])
+      console.log( document.querySelectorAll('div[attr-id]')[this.pattern[i + 1]])
+      createLineBetweenSpots(i, {x: document.querySelectorAll('div[attr-id]')[pointer].getBoundingClientRect().left + 6, y: document.querySelectorAll('div[attr-id]')[pointer].getBoundingClientRect().top + 5})
+      rotateLineBetweenSpots(i, {x: document.querySelectorAll('div[attr-id]')[pointer].getBoundingClientRect().left + 6, y: document.querySelectorAll('div[attr-id]')[pointer].getBoundingClientRect().top + 5}, {x: document.querySelectorAll('div[attr-id]')[this.pattern[i + 1]].getBoundingClientRect().left + 6, y: document.querySelectorAll('div[attr-id]')[this.pattern[i + 1]].getBoundingClientRect().top + 5})
+    }
+  }.bind(this))
+}
+
+
+Board.prototype.removePatternInGrid = function () {
+
+  setTimeout(function(){
+    var linesArray = Array.prototype.slice.call(document.querySelectorAll('div.line'))
+    linesArray.map(function(line){
+      line.remove()
+    })
+
+  }.bind(this), 4 * 1000)
+}
+
+
 Board.prototype.checkLimits = function (i, j) {
 
 
@@ -112,32 +140,35 @@ Board.prototype.createBoard = function() {
     for(var j = 0; j < this.width; j++) {
 
       var spotInnerPointer = document. createElement('div')
-      spotInnerPointer.id = 'spot-inner-pointer-' + j +'-' + i
+      spotInnerPointer.setAttribute('attr-id' ,(i + 1) * (j + 1) - 1)
 
       spotInnerPointer.className = 'spot-inner-pointer'
       spotInnerPointer.onclick = function () {
         document.getElementById(this.gameDOM.selectedSpotId - 1).remove()
+        console.log(this.userPattern)
       }.bind(this)
 
       spotInnerPointer.onmouseover = function (e) {
-        console.log(spotInnerPointer.getBoundingClientRect().left)
       /*  this.gameDOM.selectedSpot.x = spotInnerPointer.getBoundingClientRect().left + spotInnerPointer.getBoundingClientRect().width / 2
         this.gameDOM.selectedSpot.y = spotInnerPointer.getBoundingClientRect().top + spotInnerPointer.getBoundingClientRect().height / 2
 */
         this.gameDOM.selectedSpot.x = e.pageX + spotInnerPointer.getBoundingClientRect().width / 2
-        this.gameDOM.selectedSpot.y =  e.pageY + spotInnerPointer.getBoundingClientRect().height / 2
+        this.gameDOM.selectedSpot.y = e.pageY + spotInnerPointer.getBoundingClientRect().height / 2
         console.log(spotInnerPointer.style)
         // TODO check what happends with the reference of the object
         spotInnerPointer.style.opacity = 1
 
         createLineBetweenSpots(this.gameDOM.selectedSpotId, this.gameDOM.selectedSpot)
         this.gameDOM.selectedSpotId++
+        this.userPattern.push(spotInnerPointer.getAttribute('attr-id'))
       }.bind(this)
 
       var spotInner = document. createElement('div')
       spotInner.className = 'spot-inner'
 
       spotInner.append(spotInnerPointer)
+
+      spotInnerPointer = null
 
       var spot = document. createElement('div')
       spot.className = 'spot'
@@ -173,6 +204,7 @@ Board.prototype.removeBoard = function() {
 function createLineBetweenSpots (selectedSpotId, selectedSpot) {
   var line = document.createElement('div')
   line.id = selectedSpotId
+  line.className  = 'line'
   line.style.position = 'absolute'
   line.style.top = selectedSpot.y + 'px'
   line.style.left = selectedSpot.x + 'px'
@@ -186,6 +218,40 @@ function createLineBetweenSpots (selectedSpotId, selectedSpot) {
   line.style.transformOrigin = '0 0'
 
   document.body.append(line)
+}
+
+/************************************************************************
+*   Create line to join the dots and create the pattern                 *
+/***********************************************************************/
+function rotateLineBetweenSpots (id, origin, target) {
+
+
+  //Calculate pitagoras to obtain the width of the lines among the ponints
+  var width = Math.sqrt((origin.x - target.x) ** 2  +  (origin.y - target.y) ** 2 , 2)
+  var line = document.getElementById(id)
+  line.style.width = width + 'px'
+
+  if (origin.x < target.x) {
+    //compute the angle of the rotation of the line by trigonometry
+    var angle =  Math.atan((origin.y - target.y)/(origin.x - target.x)) * 180/ Math.PI
+    line.style.transform = 'rotate(' + angle + 'deg)'
+  } else if (origin.x > target.x) {
+    console.log(origin.x)
+    console.log(target.x)
+
+    //compute the angle of the rotation of the line by trigonometry
+    var angle =  -1 * Math.atan((target.y - origin.y)/(target.x - origin.x)) * 180/ Math.PI
+    console.log('angulo: ' + (180 - angle))
+    line.style.transform = 'rotate(' + (180 - angle) + 'deg)'
+  }
+   else {
+     if (origin.y - target.y > 0) {
+       line.style.transform = 'rotate(' + (-90) + 'deg)'
+     } else {
+       line.style.transform = 'rotate(' + ( 90) + 'deg)'
+     }
+   }
+
 }
 
 

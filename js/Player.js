@@ -14,6 +14,9 @@ Player.prototype.addBoard = function (board) {
 Player.prototype.startPlaying = function () {
   this.score = 10
   this.board.createBoard()
+  this.board.drawPatternInGrid()
+  this.board.removePatternInGrid()
+
 }
 
 Player.prototype.answear = function (userPattern) {
