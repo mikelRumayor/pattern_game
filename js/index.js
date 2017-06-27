@@ -1,38 +1,48 @@
+var game = new Game(TIMER);
+var gameDOM = new GameDOM();
 
+var player1 = new Player(0, 'Mikel', TIMER)
+var player2 = new Player(1, 'Fran', TIMER)
+
+var board = new Board(gameDOM, GRID_WIDTH, GRID_HEIGHT)
+
+window.onload = function () {
+  player1.addBoard(board)
+  player2.addBoard(board)
+
+  game.addPlayer(player1)
+  game.addPlayer(player2)
+
+  game.initializeGame()
+
+  window.addEventListener('mousemove', function(e) {
+    var line = document.getElementById(gameDOM.selectedSpotId - 1)
+
+    if(line) {
+      createPatternByMouse(e, gameDOM.selectedSpot, line)
+    }
+  }, true);
+}
+
+/*
 window.onload = function () {
 
   var selectedSpot = {}
   var selectedSpotId = 0
+  var userPattern = []
 
   var innerSpotsPointer = document.getElementsByClassName('spot-inner-pointer')
   var innerSpotsPointerArray = Array.prototype.slice.call(innerSpotsPointer)
 
 innerSpotsPointerArray.forEach(function (spot) {
-
   spot.addEventListener('mouseover', function (e) {
     selectedSpot.x = spot.getBoundingClientRect().left + spot.getBoundingClientRect().width/2
     selectedSpot.y = spot.getBoundingClientRect().top + spot.getBoundingClientRect().height/2
     spot.style.opacity = 1
 
-    console.log(spot.getBoundingClientRect().left + spot.getBoundingClientRect().width/2)
-
-    var line = document.createElement('div')
-    line.id = selectedSpotId
-    line.style.position = 'absolute'
-    line.style.top = selectedSpot.y + 'px'
-    line.style.left = selectedSpot.x + 'px'
-    line.style.width = '100px'
-    line.style.height = '2px'
-    line.style.border = '1px solid white'
-    line.style.background = 'white'
-    line.style.border = '1px solid white'
-    line.style.pointerEvents = 'none'
-
-    line.style.transformOrigin = '0 0'
-
-    document.body.append(line)
+    createLineBetweenSpots(selectedSpotId, selectedSpot)
     selectedSpotId++
-    spot.style.opacity = 1
+    userPattern.push(spot.getAttribute('pattern-id'))
   })
 
 
@@ -42,9 +52,8 @@ innerSpotsPointerArray.forEach(function (spot) {
 
 })
 
-
-window.addEventListener('mousemove', function(e) {
-  var line = document.getElementById(selectedSpotId - 1)
+  window.addEventListener('mousemove', function(e) {
+    var line = document.getElementById(selectedSpotId - 1)
 
     if(line) {
       createPatternByMouse(e, selectedSpot, line)
@@ -52,10 +61,11 @@ window.addEventListener('mousemove', function(e) {
   }, true);
 }
 
+*/
+
 /**************************************************************************
 *   Trace a line among the selected point in the grid trackcing the mouse *
 **************************************************************************/
-
 function createPatternByMouse (event, selectedSpot, line) {
   //Calculate pitagoras to obtain the width of the lines among the ponints
   var width = Math.sqrt((selectedSpot.x - event.pageX) ** 2  +  (selectedSpot.y - event.pageY) ** 2 , 2)

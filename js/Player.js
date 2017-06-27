@@ -4,15 +4,22 @@ function Player (id, name, timer) {
   this.timer = timer
   this.board = null
   this.patternAnswer = null
-  this.score = 0
+  this.score = null
 }
 
 Player.prototype.addBoard = function (board) {
   this.board = board
 }
 
-Player.prototype.answear = function () {
+Player.prototype.startPlaying = function () {
+  this.score = 10
+  this.board.createBoard()
+}
 
+Player.prototype.answear = function (userPattern) {
+  this.board.setUserPattern(userPattern)
+  this.patternAnswer = this.board.comparePatterns()
+  this.rightAnswear()
 }
 
 Player.prototype.rightAnswear = function () {
@@ -35,4 +42,4 @@ Player.prototype.timeUp = function () {
 }
 
 
-module.exports = Player
+// module.exports = Player
