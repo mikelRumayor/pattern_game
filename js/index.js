@@ -10,15 +10,17 @@ window.onload = function () {
 innerSpotsPointerArray.forEach(function (spot) {
 
   spot.addEventListener('mouseover', function (e) {
-    selectedSpot.x = e.pageX
-    selectedSpot.y = e.pageY
+    selectedSpot.x = spot.getBoundingClientRect().left + spot.getBoundingClientRect().width/2
+    selectedSpot.y = spot.getBoundingClientRect().top + spot.getBoundingClientRect().height/2
     spot.style.opacity = 1
+
+    console.log(spot.getBoundingClientRect().left + spot.getBoundingClientRect().width/2)
 
     var line = document.createElement('div')
     line.id = selectedSpotId
     line.style.position = 'absolute'
-    line.style.top = e.pageY+'px'
-    line.style.left = e.pageX + 'px'
+    line.style.top = selectedSpot.y + 'px'
+    line.style.left = selectedSpot.x + 'px'
     line.style.width = '100px'
     line.style.height = '2px'
     line.style.border = '1px solid white'
