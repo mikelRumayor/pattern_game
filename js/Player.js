@@ -4,7 +4,9 @@ function Player (id, name, timer) {
   this.timer = timer
   this.board = null
   this.patternAnswear = null
-  this.score = null
+  this.answears = 0
+  this.score = 0
+  this.played = false
 }
 
 Player.prototype.addBoard = function (board) {
@@ -14,14 +16,12 @@ Player.prototype.addBoard = function (board) {
 
 Player.prototype.startPlaying = function () {
   this.board.createBoard()
-  this.createNewPatternQuestion()
+  this.createNewPatternQuestion(this.answears)
 }
 
-Player.prototype.createNewPatternQuestion = function () {
+Player.prototype.createNewPatternQuestion = function (answearsScore) {
+  this.board.drawPatternInGrid(answearsScore)
   this.board.removePatternInGrid()
-  this.board.drawPatternInGrid()
-  this.board.removePatternInGrid()
-  this.board.addEventListenersToSpots()
 }
 
 Player.prototype.answear = function (userPattern) {
@@ -37,11 +37,14 @@ Player.prototype.rightAnswear = function () {
   alert(this.patternAnswear)
   if (this.patternAnswear) {
     this.score += 10
+    this.answears++
     this.timer += 5 * 1000
 
   } else {
     this.timer -= 5 * 1000
   }
+  alert(this.score)
+  changeScore.call(this)
   return this.patternAnswear
 }
 
@@ -53,5 +56,7 @@ Player.prototype.timeUp = function () {
   }
 }
 
-
+function changeScore () {
+  document.getElementsByClassName('scorer')[0].innerHTML = this.score
+}
 // module.exports = Player

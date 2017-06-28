@@ -1,0 +1,116 @@
+body {
+  color: white;
+  /*background: url("https://www.planwallpaper.com/static/images/Cool_background_vU75hJM.jpg");*/
+  background: black;
+  background-size: cover;
+  margin: 0;
+}
+
+header h1{
+  color: white;
+  font-size: 50px;
+}
+
+
+#container {
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  margin: 0;
+  align-items: center;
+}
+
+.pattern-container {
+  background-color: rgba(0 ,0 ,0, 0.8);
+  border: 10vh solid rgba(0 ,0 ,0, 0);
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 200px;
+  height: 200px;
+
+}
+.flex-column {
+  display: inline-flex;
+  flex-direction: row;
+  justify-content:center;
+  width: 200px;
+}
+/*
+.flex-row {
+  display: inline-flex;
+  justify-content: space-around;
+  width: 200px;
+
+}
+.flex-column {
+  display: flex;
+  flex-direction: column;
+  justify-content:center;
+}*/
+
+.spot-container {
+  width: 20vh;
+  height: 20vh;
+  display: flex;
+  justify-content: center;
+}
+
+.spot {
+  width: 40px;
+  height: 40px;
+  display: inline-block;
+  border: px solid white;
+  border-radius:25px;
+/*  margin-right: 20%;
+  margin-bottom: 20%;*/
+
+  box-shadow: 2px 2px 2px 1.25px
+
+}
+
+.spot-inner {
+  width: 25px;
+  height: 25px
+  border: 1px solid white;
+  border: 2px solid white;
+  border-radius:15px;
+  margin: 5.5px;
+  box-shadow: 1px 1px 1px 1px
+}
+
+.spot-inner-pointer {
+  width: 10px;
+  height: 10px;
+  border: 1px solid white;
+  border: 2px solid white;
+  border-radius:15px;
+  margin: 5px;
+  background: white;
+  opacity: 0;
+}
+
+.timer {
+  color: black;
+}
+
+.timer-container {
+  position: absolute;
+  top: 10px;
+  text-align: center;
+}
+
+.scorer {
+  color: black;
+}
+
+.scorer-container {
+  position: absolute;
+  top: 10px;
+  top: 50px;
+  text-align: center;
+}

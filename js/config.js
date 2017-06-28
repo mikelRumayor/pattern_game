@@ -1,4 +1,4 @@
 var GRID_HEIGHT = 3
 var GRID_WIDTH = 3
 
-var TIMER = 60 * 1000
+var TIMER = 40 * 1000

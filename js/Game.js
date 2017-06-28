@@ -1,10 +1,8 @@
 function Game (timer) {
   this.timer = timer
   this.playersArray = []
-  this.winner = ''
-  this.turn = ''
-  this.boardCreationCallback = null
-  this.boardRemovalCallback = null
+  this.winner = null
+  this.turn = null
 }
 
 Game.prototype.addPlayer = function (player) {
@@ -13,11 +11,16 @@ Game.prototype.addPlayer = function (player) {
 
 Game.prototype.initializeGame = function () {
   this.setTurn(this.playersArray[0])
+  this.createTimer()
+  this.createScorer()
 }
 
 Game.prototype.setTurn = function (player) {
   this.turn = player
+  alert('turn: ' + this.turn.name)
+
   this.turn.startPlaying()
+  this.turn.played = true
   // TODO activte to play
   // this.checkTimeUp()
 }
@@ -32,14 +35,20 @@ Game.prototype.switchTurn = function (){
         this.turn = player
       }
   }.bind(this))
+  alert('turn: ' + this.turn.name)
+  this.turn.board.removeBoard()
   this.turn.startPlaying()
+  this.turn.played = true
   this.checkTimeUp()
 }
 
 Game.prototype.whoWon = function (){
-  this.winner = this.playersArray[0]
+  var winnerScore = 0
   this.playersArray.forEach(function (player) {
-      if(this.winner.score < player.score) {
+      console.log(player.score)
+      if(winnerScore <= player.score) {
+        alert(player.score)
+        winnerScore = player.score
         this.winner = player
       }
   }.bind(this))
@@ -47,29 +56,60 @@ Game.prototype.whoWon = function (){
   return this.winner.name
 }
 
+Game.prototype.createTimer = function () {
+  var timerElement = document.createElement('div')
+  timerElement.className = 'timer'
+  timerElement.innerHTML = this.turn.timer / 1000
+
+  var timerContainer = document.createElement('div')
+  timerContainer.className = 'timer-container'
+
+  timerContainer.append(timerElement)
+
+  document.getElementById('container').insertBefore(timerContainer, document.getElementById('container').firstChild);
+}
+
+Game.prototype.createScorer = function () {
+  var scorerElement = document.createElement('div')
+  scorerElement.className = 'scorer'
+  scorerElement.innerHTML = this.turn.score
+
+  var scorerContainer = document.createElement('div')
+  scorerContainer.className = 'scorer-container'
+
+  scorerContainer.append(scorerElement)
+
+  document.getElementById('container').insertBefore(scorerContainer, document.getElementById('container').firstChild);
+}
+
 Game.prototype.checkTimeUp = function () {
   var timerId = setTimeout(function () {
     this.turn.timer -= 1 * 1000
-    console.log('time: ', this.turn.timer)
     if(this.turn.timeUp()) {
+      changeTimerValue.call(this)
+
         alert('switch player')
         clearTimeout(timerId)
-        var finnished = false
 
-        this.playersArray.forEach(function(player) {
-          if (player.score) {
-            finnished = true
-          }
-        })
-        alert(finnished)
+        var finnished = this.playersArray.filter(function(player){ return player.played === true }).length === this.playersArray.length ? true : false
+
         if(finnished){
-          alert(this.whoWon())
+          alert('The winner is : ' + this.whoWon())
         } else {
+          alert('name: ' + this.turn.name)
+
+          alert('score: ' + JSON.stringify(this.turn))
           this.switchTurn()
+          changeTimerValue.call(this)
         }
       } else {
         clearTimeout(timerId)
+        changeTimerValue.call(this)
         this.checkTimeUp()
       }
   }.bind(this), 1 * 1000)
+}
+
+function changeTimerValue () {
+  document.getElementsByClassName('timer')[0].innerHTML = this.turn.timer / 1000
 }

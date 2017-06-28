@@ -11,12 +11,12 @@ Board.prototype.setUserPattern = function (userPattern) {
   this.userPattern = userPattern
 }
 
-Board.prototype.generatePattern = function () {
+Board.prototype.generatePattern = function (answearsScore) {
   this.pattern = []
   this.userPattern = []
   var patternIndexes = []
   // var randomElements = Math.floor(Math.random() * (this.width * this.height)) + 1
-  var randomElements = 2
+  randomElements = answearsScore <= 5 ? 2 : Math.floor(Math.random() * (this.width * this.height)) + 1
   var patternElement = Math.floor(Math.random() * (this.width * this.height))
   patternIndexes.push(patternElement)
 
@@ -85,8 +85,8 @@ Board.prototype.generatePattern = function () {
 
 }
 
-Board.prototype.drawPatternInGrid = function () {
-  this.generatePattern()
+Board.prototype.drawPatternInGrid = function (answearsScore) {
+  this.generatePattern(answearsScore)
 
   console.log(this.pattern)
   this.pattern.map(function (pointer, i) {
@@ -112,7 +112,7 @@ Board.prototype.removePatternInGrid = function () {
     spotCursorArray.map(function(spotCursor){
       spotCursor.style.opacity = 0
     })
-
+    this.addEventListenersToSpots()
   }.bind(this), 4 * 1000)
 }
 
@@ -199,8 +199,6 @@ Board.prototype.comparePatterns = function() {
 }
 
 Board.prototype.removeBoard = function() {
-  console.log(document.querySelector('div.pattern-container'))
-
   document.querySelector('div.pattern-container').remove()
 
   var lines = Array.prototype.slice.call(document.querySelectorAll('div.line'))
@@ -208,8 +206,6 @@ Board.prototype.removeBoard = function() {
   lines.map(function(line){
     line.remove()
   })
-
-  console.log(document.querySelector('div.pattern-container'))
 }
 
 /************************************************************************
