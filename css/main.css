@@ -11,9 +11,8 @@ header h1{
   font-size: 50px;
 }
 
-
 #container {
-  justify-content: center;
+  justify-content: space-around;
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -95,22 +94,19 @@ header h1{
 }
 
 .timer {
-  color: black;
+  color: white;
+  font-size: 25px;
 }
 
 .timer-container {
-  position: absolute;
-  top: 10px;
   text-align: center;
 }
 
 .scorer {
-  color: black;
+  color: white;
+  font-size: 25px;
 }
 
 .scorer-container {
-  position: absolute;
-  top: 10px;
-  top: 50px;
   text-align: center;
 }

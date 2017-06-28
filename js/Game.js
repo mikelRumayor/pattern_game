@@ -13,16 +13,20 @@ Game.prototype.initializeGame = function () {
   this.setTurn(this.playersArray[0])
   this.createTimer()
   this.createScorer()
+  this.turn.startPlaying()
+  this.turn.played = true
+  // TODO activte to play
+  this.checkTimeUp()
 }
 
 Game.prototype.setTurn = function (player) {
   this.turn = player
   alert('turn: ' + this.turn.name)
-
+/*
   this.turn.startPlaying()
   this.turn.played = true
   // TODO activte to play
-  // this.checkTimeUp()
+  this.checkTimeUp()*/
 }
 
 Game.prototype.whoseTurn = function (){
@@ -60,26 +64,43 @@ Game.prototype.createTimer = function () {
   var timerElement = document.createElement('div')
   timerElement.className = 'timer'
   timerElement.innerHTML = this.turn.timer / 1000
+  timerElement.style.display = 'inline-block'
+
+  var timeSpan = document.createElement('span')
+  timeSpan.innerHTML = 'time:'
+  timeSpan.style.fontSize = '24px'
+  timeSpan.style.display = 'inline-block'
 
   var timerContainer = document.createElement('div')
   timerContainer.className = 'timer-container'
 
+  timerContainer.append(timeSpan)
   timerContainer.append(timerElement)
 
-  document.getElementById('container').insertBefore(timerContainer, document.getElementById('container').firstChild);
+  document.getElementsByTagName('header')[0].append(timerContainer);
 }
 
 Game.prototype.createScorer = function () {
   var scorerElement = document.createElement('div')
   scorerElement.className = 'scorer'
   scorerElement.innerHTML = this.turn.score
+  scorerElement.style.display = 'inline-block'
+
+  var scorerSpan = document.createElement('span')
+  scorerSpan.innerHTML = 'score:  '
+  scorerSpan.style.fontSize = '24px'
+  scorerSpan.style.display = 'inline-block'
 
   var scorerContainer = document.createElement('div')
   scorerContainer.className = 'scorer-container'
 
+  scorerContainer.append(scorerSpan)
+
   scorerContainer.append(scorerElement)
 
-  document.getElementById('container').insertBefore(scorerContainer, document.getElementById('container').firstChild);
+  document.getElementsByTagName('header')[0].append(scorerContainer);
+
+  //document.getElementById('container').insertBefore(scorerContainer, document.getElementById('container').firstChild);
 }
 
 Game.prototype.checkTimeUp = function () {

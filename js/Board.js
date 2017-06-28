@@ -160,6 +160,8 @@ Board.prototype.createBoard = function() {
 
       spotContainer.append(spot)
       flexColumn.append(spotContainer)
+      // flexColumn.append(renderSpots(j, cont))
+
     }
     flexRow.append(flexColumn)
   }
@@ -279,4 +281,27 @@ function spotClick (e) {
   this.gameDOM.renewScopeVaribles()
 }
 
+function renderSpots (i, cont) {
+  var spotInnerPointer = document.createElement('div')
+  spotInnerPointer.setAttribute('attr-id' ,cont++)
+
+  spotInnerPointer.className = 'spot-inner-pointer'
+
+  var spotInner = document.createElement('div')
+  spotInner.className = 'spot-inner'
+
+  spotInner.append(spotInnerPointer)
+
+  var spot = document.createElement('div')
+  spot.className = 'spot'
+
+  spot.append(spotInner)
+
+  var spotContainer = document.createElement('div')
+  spotContainer.className = 'spot-container'
+
+  spotContainer.append(spot)
+
+  return spotContainer
+}
 // module.exports = Board
