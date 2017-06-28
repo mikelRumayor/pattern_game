@@ -3,29 +3,38 @@ function Player (id, name, timer) {
   this.name = name
   this.timer = timer
   this.board = null
-  this.patternAnswer = null
+  this.patternAnswear = null
   this.score = null
 }
 
 Player.prototype.addBoard = function (board) {
   this.board = board
+  this.board.player = this
 }
 
 Player.prototype.startPlaying = function () {
-  this.score = 10
   this.board.createBoard()
+  this.createNewPatternQuestion()
+}
+
+Player.prototype.createNewPatternQuestion = function () {
+  this.board.removePatternInGrid()
   this.board.drawPatternInGrid()
   this.board.removePatternInGrid()
-
+  this.board.addEventListenersToSpots()
 }
 
 Player.prototype.answear = function (userPattern) {
   this.board.setUserPattern(userPattern)
-  this.patternAnswer = this.board.comparePatterns()
+  this.patternAnswear = this.board.comparePatterns()
   this.rightAnswear()
+  this.board.removeEventListenersToSpots()
+  this.board.removeBoard()
+  this.startPlaying()
 }
 
 Player.prototype.rightAnswear = function () {
+  alert(this.patternAnswear)
   if (this.patternAnswear) {
     this.score += 10
     this.timer += 5 * 1000

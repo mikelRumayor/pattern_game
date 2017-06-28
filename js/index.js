@@ -78,7 +78,7 @@ function createPatternByMouse (event, selectedSpot, line) {
   } else if (selectedSpot.x > event.pageX) {
     //compute the angle of the rotation of the line by trigonometry
     var angle =  -1 * Math.atan((event.pageY - selectedSpot.y)/(event.pageX - selectedSpot.x)) * 180/ Math.PI
-    console.log('angulo: ' + (180 - angle))
+    // console.log('angulo: ' + (180 - angle))
     line.style.transform = 'rotate(' + (180 - angle) + 'deg)'
   }
    else {

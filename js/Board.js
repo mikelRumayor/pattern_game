@@ -4,22 +4,19 @@ function Board (gameDOM, width, height) {
   this.height = height
   this.pattern = []
   this.userPattern = []
+  this.player = null
 }
 
 Board.prototype.setUserPattern = function (userPattern) {
   this.userPattern = userPattern
 }
 
-Board.prototype.comparePatterns = function () {
-//   TODO DO LOGIC PART
-  this.pattern === this.userPattern ? true : false
-
-}
 Board.prototype.generatePattern = function () {
-  //var matrix = new Array(this.width).fill(new Array(this.height).fill(false))
+  this.pattern = []
+  this.userPattern = []
   var patternIndexes = []
-  var randomElements = Math.floor(Math.random() * (this.width * this.height)) + 1
-
+  // var randomElements = Math.floor(Math.random() * (this.width * this.height)) + 1
+  var randomElements = 2
   var patternElement = Math.floor(Math.random() * (this.width * this.height))
   patternIndexes.push(patternElement)
 
@@ -91,13 +88,10 @@ Board.prototype.generatePattern = function () {
 Board.prototype.drawPatternInGrid = function () {
   this.generatePattern()
 
-  // this.pattern = [0, 4, 1]
   console.log(this.pattern)
   this.pattern.map(function (pointer, i) {
     document.querySelectorAll('div[attr-id]')[pointer].style.opacity = 1
     if (i < this.pattern.length - 1 ) {
-      console.log( document.querySelectorAll('div[attr-id]')[pointer])
-      console.log( document.querySelectorAll('div[attr-id]')[this.pattern[i + 1]])
       createLineBetweenSpots(i, {x: document.querySelectorAll('div[attr-id]')[pointer].getBoundingClientRect().left + 6, y: document.querySelectorAll('div[attr-id]')[pointer].getBoundingClientRect().top + 5})
       rotateLineBetweenSpots(i, {x: document.querySelectorAll('div[attr-id]')[pointer].getBoundingClientRect().left + 6, y: document.querySelectorAll('div[attr-id]')[pointer].getBoundingClientRect().top + 5}, {x: document.querySelectorAll('div[attr-id]')[this.pattern[i + 1]].getBoundingClientRect().left + 6, y: document.querySelectorAll('div[attr-id]')[this.pattern[i + 1]].getBoundingClientRect().top + 5})
     }
@@ -109,8 +103,14 @@ Board.prototype.removePatternInGrid = function () {
 
   setTimeout(function(){
     var linesArray = Array.prototype.slice.call(document.querySelectorAll('div.line'))
+    var spotCursorArray = Array.prototype.slice.call(document.querySelectorAll('div.spot-inner-pointer'))
+
     linesArray.map(function(line){
       line.remove()
+    })
+
+    spotCursorArray.map(function(spotCursor){
+      spotCursor.style.opacity = 0
     })
 
   }.bind(this), 4 * 1000)
@@ -129,53 +129,33 @@ Board.prototype.generateQueryPattern = function () {
 **********************************************************/
 Board.prototype.createBoard = function() {
 
-  var flexRow = document. createElement('div')
+  var flexRow = document.createElement('div')
   flexRow.className = 'flex-row'
+
+  var cont = 0
 
   for(var i = 0; i < this.width; i++) {
 
-    var flexColumn = document. createElement('div')
+    var flexColumn = document.createElement('div')
     flexColumn.className = 'flex-column'
 
-    for(var j = 0; j < this.width; j++) {
-
-      var spotInnerPointer = document. createElement('div')
-      spotInnerPointer.setAttribute('attr-id' ,(i + 1) * (j + 1) - 1)
+    for(var j = 0; j < this.height; j++) {
+      var spotInnerPointer = document.createElement('div')
+      spotInnerPointer.setAttribute('attr-id' ,cont++)
 
       spotInnerPointer.className = 'spot-inner-pointer'
-      spotInnerPointer.onclick = function () {
-        document.getElementById(this.gameDOM.selectedSpotId - 1).remove()
-        console.log(this.userPattern)
-      }.bind(this)
 
-      spotInnerPointer.onmouseover = function (e) {
-      /*  this.gameDOM.selectedSpot.x = spotInnerPointer.getBoundingClientRect().left + spotInnerPointer.getBoundingClientRect().width / 2
-        this.gameDOM.selectedSpot.y = spotInnerPointer.getBoundingClientRect().top + spotInnerPointer.getBoundingClientRect().height / 2
-*/
-        this.gameDOM.selectedSpot.x = e.pageX + spotInnerPointer.getBoundingClientRect().width / 2
-        this.gameDOM.selectedSpot.y = e.pageY + spotInnerPointer.getBoundingClientRect().height / 2
-        console.log(spotInnerPointer.style)
-        // TODO check what happends with the reference of the object
-        spotInnerPointer.style.opacity = 1
-
-        createLineBetweenSpots(this.gameDOM.selectedSpotId, this.gameDOM.selectedSpot)
-        this.gameDOM.selectedSpotId++
-        this.userPattern.push(spotInnerPointer.getAttribute('attr-id'))
-      }.bind(this)
-
-      var spotInner = document. createElement('div')
+      var spotInner = document.createElement('div')
       spotInner.className = 'spot-inner'
 
       spotInner.append(spotInnerPointer)
 
-      spotInnerPointer = null
-
-      var spot = document. createElement('div')
+      var spot = document.createElement('div')
       spot.className = 'spot'
 
       spot.append(spotInner)
 
-      var spotContainer = document. createElement('div')
+      var spotContainer = document.createElement('div')
       spotContainer.className = 'spot-container'
 
       spotContainer.append(spot)
@@ -183,7 +163,7 @@ Board.prototype.createBoard = function() {
     }
     flexRow.append(flexColumn)
   }
-  var patternContainer = document. createElement('div')
+  var patternContainer = document.createElement('div')
   patternContainer.className = 'pattern-container'
 
   patternContainer.append(flexRow)
@@ -193,9 +173,43 @@ Board.prototype.createBoard = function() {
 
 }
 
+Board.prototype.addEventListenersToSpots = function() {
+  var spotCursorArray = Array.prototype.slice.call(document.querySelectorAll('div.spot-inner-pointer'))
+
+  spotCursorArray.map(function (spotCursor) {
+    spotCursor.addEventListener('click', spotClick.bind(this))
+    spotCursor.addEventListener('mouseover',spotMouseOver.bind(this) )
+  }.bind(this))
+}
+
+Board.prototype.removeEventListenersToSpots = function() {
+  var spotCursorArray = Array.prototype.slice.call(document.querySelectorAll('div.spot-inner-pointer'))
+
+  spotCursorArray.map(function (spotCursor) {
+    spotCursor.removeEventListener('click', spotClick.bind(this))
+    spotCursor.removeEventListener('mouseover',spotMouseOver.bind(this) )
+  }.bind(this))
+}
+
+Board.prototype.comparePatterns = function() {
+  console.log(this.pattern.toString())
+  console.log(this.userPattern.toString())
+
+  return this.pattern.toString() === this.userPattern.toString() || this.pattern.reverse().toString() === this.userPattern.toString() ? true : false
+}
 
 Board.prototype.removeBoard = function() {
+  console.log(document.querySelector('div.pattern-container'))
 
+  document.querySelector('div.pattern-container').remove()
+
+  var lines = Array.prototype.slice.call(document.querySelectorAll('div.line'))
+
+  lines.map(function(line){
+    line.remove()
+  })
+
+  console.log(document.querySelector('div.pattern-container'))
 }
 
 /************************************************************************
@@ -225,7 +239,6 @@ function createLineBetweenSpots (selectedSpotId, selectedSpot) {
 /***********************************************************************/
 function rotateLineBetweenSpots (id, origin, target) {
 
-
   //Calculate pitagoras to obtain the width of the lines among the ponints
   var width = Math.sqrt((origin.x - target.x) ** 2  +  (origin.y - target.y) ** 2 , 2)
   var line = document.getElementById(id)
@@ -236,12 +249,9 @@ function rotateLineBetweenSpots (id, origin, target) {
     var angle =  Math.atan((origin.y - target.y)/(origin.x - target.x)) * 180/ Math.PI
     line.style.transform = 'rotate(' + angle + 'deg)'
   } else if (origin.x > target.x) {
-    console.log(origin.x)
-    console.log(target.x)
-
     //compute the angle of the rotation of the line by trigonometry
     var angle =  -1 * Math.atan((target.y - origin.y)/(target.x - origin.x)) * 180/ Math.PI
-    console.log('angulo: ' + (180 - angle))
+    // console.log('angulo: ' + (180 - angle))
     line.style.transform = 'rotate(' + (180 - angle) + 'deg)'
   }
    else {
@@ -254,5 +264,23 @@ function rotateLineBetweenSpots (id, origin, target) {
 
 }
 
+function spotMouseOver (e) {
+  this.gameDOM.selectedSpot.x = e.pageX + 10 / 2
+  this.gameDOM.selectedSpot.y = e.pageY + 10 / 2
+  console.log(e.target.style)
+  // TODO check what happends with the reference of the object
+  e.target.style.opacity = 1
+
+  createLineBetweenSpots(this.gameDOM.selectedSpotId, this.gameDOM.selectedSpot)
+  this.gameDOM.selectedSpotId++
+  this.userPattern.push(e.target.getAttribute('attr-id'))
+}
+
+function spotClick (e) {
+  document.getElementById(this.gameDOM.selectedSpotId - 1).remove()
+  this.userPattern = this.userPattern.filter((v, i, a) => a.indexOf(v) === i);
+  this.player.answear(this.userPattern)
+  this.gameDOM.renewScopeVaribles()
+}
 
 // module.exports = Board

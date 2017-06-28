@@ -13,7 +13,6 @@ Game.prototype.addPlayer = function (player) {
 
 Game.prototype.initializeGame = function () {
   this.setTurn(this.playersArray[0])
-
 }
 
 Game.prototype.setTurn = function (player) {
