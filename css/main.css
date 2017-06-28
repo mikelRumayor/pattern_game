@@ -1,14 +1,22 @@
 body {
   color: white;
+  font-family: 'Montserrat', sans-serif;
   /*background: url("https://www.planwallpaper.com/static/images/Cool_background_vU75hJM.jpg");*/
   background: black;
   background-size: cover;
   margin: 0;
+  text-transform: capitalize;
+}
+header{
+  background-color: rgba(0 ,0 ,0, 0.8);
+  border: 3vh solid rgba(0 ,0 ,0, 0);
 }
 
 header h1{
+  margin: 10px;
   color: white;
   font-size: 50px;
+  cursor: pointer;
 }
 
 #container {
@@ -109,4 +117,37 @@ header h1{
 
 .scorer-container {
   text-align: center;
+}
+
+.menu {
+  width: 20vw ;
+  height: 20vh;
+  background-color: rgba(0 ,0 ,0, 0.8);
+  border: 5vh solid rgba(0 ,0 ,0, 0);
+}
+.players {
+  width: 100%;
+  height: 50%;
+  padding: 5%;
+}
+
+.players input {
+  width: 50%;
+  margin: 5%;
+}
+
+.start {
+  height: 1vh;
+  background-color: rgba(0 ,0 ,0, 0.8);
+  border: 3vh solid rgba(0 ,0 ,0, 0);
+  cursor: pointer;
+}
+
+#particles-js {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
 }

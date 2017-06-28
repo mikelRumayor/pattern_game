@@ -21,7 +21,8 @@ Game.prototype.initializeGame = function () {
 
 Game.prototype.setTurn = function (player) {
   this.turn = player
-  alert('turn: ' + this.turn.name)
+  renderPlayer.call(this)
+  // alert('turn: ' + this.turn.name)
 /*
   this.turn.startPlaying()
   this.turn.played = true
@@ -34,12 +35,14 @@ Game.prototype.whoseTurn = function (){
 }
 
 Game.prototype.switchTurn = function (){
+  alert(this.turn.name)
   this.playersArray.forEach(function (player) {
       if(this.turn.name !== player.name) {
         this.turn = player
+        alert(this.turn.name)
       }
   }.bind(this))
-  alert('turn: ' + this.turn.name)
+  // alert('turn: ' + this.turn.name)
   this.turn.board.removeBoard()
   this.turn.startPlaying()
   this.turn.played = true
@@ -118,17 +121,34 @@ Game.prototype.checkTimeUp = function () {
           alert('The winner is : ' + this.whoWon())
         } else {
           alert('name: ' + this.turn.name)
+          alert('score: ' + this.turn.score)
+          alert('right answears: ' + this.turn.answears)
 
-          alert('score: ' + JSON.stringify(this.turn))
           this.switchTurn()
+          changeNameValue.call(this)
           changeTimerValue.call(this)
         }
       } else {
         clearTimeout(timerId)
         changeTimerValue.call(this)
-        this.checkTimeUp()
+        this.checkTimeUp.call(this)
       }
   }.bind(this), 1 * 1000)
+  console.log(this.turn.score)
+}
+
+function renderPlayer () {
+  var playerElement = document.createElement('div')
+  playerElement.className = 'player'
+  playerElement.innerHTML = 'player: ' + this.turn.name
+  playerElement.style.textAlign = 'center'
+  playerElement.style.fontSize = '24px'
+
+  document.getElementsByTagName('header')[0].append(playerElement);
+}
+
+function changeNameValue () {
+  document.getElementsByClassName('player')[0].innerHTML = 'player: ' + this.turn.name
 }
 
 function changeTimerValue () {
