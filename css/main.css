@@ -167,17 +167,43 @@ header h1{
   cursor: pointer;
 }
 
-@keyframes blink {
+@keyframes show-blink {
   to {
-     color: red;
-     border-color: red;
-     box-shadow: 1px 1px 1px 1px red;
+     color: blue;
+     border-color: blue;
+     box-shadow: 1px 1px 1px 1px blue;
   }
 }
 
-.active {
+@keyframes good-blink {
+  to {
+     color: green;
+     border-color: green;
+     box-shadow: 1px 1px 1px 1px green;
+  }
+}
+
+@keyframes bad-blink {
+  to {
+    color: red;
+    border-color: red;
+    box-shadow: 1px 1px 1px 1px red;
+  }
+}
+
+.showing-pattern {
   color: white;
-  animation: blink 1s steps(2, start) infinite;
+  animation: show-blink 1s steps(2, start) infinite;
+}
+
+.good-pattern {
+  color: white;
+  animation: good-blink 1s steps(2, start) infinite;
+}
+
+.bad-pattern {
+  color: white;
+  animation: bad-blink 1s steps(2, start) infinite;
 }
 
 #particles-js {

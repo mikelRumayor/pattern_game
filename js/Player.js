@@ -29,22 +29,46 @@ Player.prototype.answear = function (userPattern) {
   this.patternAnswear = this.board.comparePatterns()
   this.rightAnswear()
   this.board.removeEventListenersToSpots()
+
+  this.board.pattern.map(function (pointer, i) {
+    document.querySelectorAll('div[attr-id]')[pointer].style.opacity = 1
+    blinkSpotAndLines(pointer, this.patternAnswear ? 'good-pattern': 'bad-pattern')
+    if (!this.patternAnswear) {
+      document.querySelectorAll('div[attr-id]')[pointer].style.opacity = 1
+      blinkSpotAndLines(pointer, 'showing-pattern')
+      if (i < this.board.pattern.length - 1 ) {
+        createLineBetweenSpots('good' + i, {x: document.querySelectorAll('div[attr-id]')[pointer].getBoundingClientRect().left + 6, y: document.querySelectorAll('div[attr-id]')[pointer].getBoundingClientRect().top + 5})
+        rotateLineBetweenSpots('good' + i, {x: document.querySelectorAll('div[attr-id]')[pointer].getBoundingClientRect().left + 6, y: document.querySelectorAll('div[attr-id]')[pointer].getBoundingClientRect().top + 5}, {x: document.querySelectorAll('div[attr-id]')[this.board.pattern[i + 1]].getBoundingClientRect().left + 6, y: document.querySelectorAll('div[attr-id]')[this.board.pattern[i + 1]].getBoundingClientRect().top + 5})
+      }
+    }
+  }.bind(this))
+
+  var cont = 2
+  var intervalId = setInterval(function() {
+    if (!cont) {
+      clearInterval(intervalId)
+      this.board.removeBoard()
+      this.startPlaying()
+    }
+    cont--
+
+  }.bind(this), 1 * 1000)
+  /*
   this.board.removeBoard()
-  this.startPlaying()
+  this.startPlaying()*/
 }
 
 Player.prototype.rightAnswear = function () {
   if (this.patternAnswear) {
     this.score += 10
     this.answears++
-    this.timer += 5 * 1000
-
+    this.timer += 10 * 1000
   } else {
-    this.timer -= 5 * 1000
+    // this.timer -= 5 * 1000
   }
   changeScore.call(this)
+
   console.log('time changed:', this.timer)
-  return this.patternAnswear
 }
 
 Player.prototype.timeUp = function () {

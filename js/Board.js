@@ -91,7 +91,7 @@ Board.prototype.drawPatternInGrid = function (answearsScore) {
   console.log(this.pattern)
   this.pattern.map(function (pointer, i) {
     document.querySelectorAll('div[attr-id]')[pointer].style.opacity = 1
-    blinkSpotAndLines(pointer)
+    blinkSpotAndLines(pointer, 'showing-pattern')
     if (i < this.pattern.length - 1 ) {
       createLineBetweenSpots(i, {x: document.querySelectorAll('div[attr-id]')[pointer].getBoundingClientRect().left + 6, y: document.querySelectorAll('div[attr-id]')[pointer].getBoundingClientRect().top + 5})
       rotateLineBetweenSpots(i, {x: document.querySelectorAll('div[attr-id]')[pointer].getBoundingClientRect().left + 6, y: document.querySelectorAll('div[attr-id]')[pointer].getBoundingClientRect().top + 5}, {x: document.querySelectorAll('div[attr-id]')[this.pattern[i + 1]].getBoundingClientRect().left + 6, y: document.querySelectorAll('div[attr-id]')[this.pattern[i + 1]].getBoundingClientRect().top + 5})
@@ -114,8 +114,8 @@ Board.prototype.removePatternInGrid = function () {
 
     spotCursorArray.map(function(spotCursor, index){
       spotCursor.style.opacity = 0
-      spotsArray[index].classList.remove('active')
-      spotsInnerArray[index].classList.remove('active')
+      spotsArray[index].classList.remove('showing-pattern')
+      spotsInnerArray[index].classList.remove('showing-pattern')
     })
 
     this.addEventListenersToSpots()
@@ -282,16 +282,15 @@ function renderSpots (cont) {
   return spotContainer
 }
 
-function blinkSpotAndLines (i) {
+function blinkSpotAndLines (i, className) {
   var spotsInnerPointerArray = Array.prototype.slice.call(document.querySelectorAll('div.spot-inner-pointer'))
   var spotsArray = Array.prototype.slice.call(document.querySelectorAll('div.spot'))
   var spotsInnerArray = Array.prototype.slice.call(document.querySelectorAll('div.spot-inner'))
 
   spotsInnerPointerArray.forEach(function (spot, index) {
-    console.log(i)
     if (spot.getAttribute('attr-id') == i) {
-      spotsArray[index].classList.add('active')
-      spotsInnerArray[index].classList.add('active')
+      spotsArray[index].classList.add(className)
+      spotsInnerArray[index].classList.add(className)
     }
     console.log(spotsArray[index].classList)
   })
