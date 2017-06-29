@@ -13,40 +13,35 @@ Game.prototype.initializeGame = function () {
   this.setTurn(this.playersArray[0])
   this.createTimer()
   this.createScorer()
-  this.turn.startPlaying()
-  this.turn.played = true
-  // TODO activte to play
-  this.checkTimeUp()
+  this.configureToStartPlaying()
 }
 
 Game.prototype.setTurn = function (player) {
   this.turn = player
+
   renderPlayer.call(this)
-  // alert('turn: ' + this.turn.name)
-/*
-  this.turn.startPlaying()
-  this.turn.played = true
-  // TODO activte to play
-  this.checkTimeUp()*/
 }
 
 Game.prototype.whoseTurn = function (){
   return this.turn.name
 }
 
+Game.prototype.configureToStartPlaying = function () {
+  this.turn.startPlaying()
+  this.turn.played = true
+
+  // TODO activte to play
+  this.checkTimeUp()
+}
+
 Game.prototype.switchTurn = function (){
-  alert(this.turn.name)
   this.playersArray.forEach(function (player) {
       if(this.turn.name !== player.name) {
         this.turn = player
-        alert(this.turn.name)
       }
   }.bind(this))
-  // alert('turn: ' + this.turn.name)
   this.turn.board.removeBoard()
-  this.turn.startPlaying()
-  this.turn.played = true
-  this.checkTimeUp()
+  this.clearAllScorerTimeRender()
 }
 
 Game.prototype.whoWon = function (){
@@ -54,13 +49,37 @@ Game.prototype.whoWon = function (){
   this.playersArray.forEach(function (player) {
       console.log(player.score)
       if(winnerScore <= player.score) {
-        alert(player.score)
         winnerScore = player.score
         this.winner = player
       }
   }.bind(this))
 
   return this.winner.name
+}
+
+Game.prototype.checkTimeUp = function () {
+  var timerId = setTimeout(function () {
+    this.turn.timer -= 1 * 1000
+    if(this.turn.timeUp()) {
+      changeTimerValue.call(this)
+
+        clearTimeout(timerId)
+
+        var finnished = this.playersArray.filter(function(player){ return player.played === true }).length === this.playersArray.length ? true : false
+
+        if(finnished){
+          this.whoWon()
+          renderWinner.call(this)
+        } else {
+          this.switchTurn()
+          this.turn.board.removeEventListenersToSpots()
+        }
+      } else {
+        clearTimeout(timerId)
+        changeTimerValue.call(this)
+        this.checkTimeUp.call(this)
+      }
+  }.bind(this), 1 * 1000)
 }
 
 Game.prototype.createTimer = function () {
@@ -102,39 +121,14 @@ Game.prototype.createScorer = function () {
   scorerContainer.append(scorerElement)
 
   document.getElementsByTagName('header')[0].append(scorerContainer);
-
-  //document.getElementById('container').insertBefore(scorerContainer, document.getElementById('container').firstChild);
 }
 
-Game.prototype.checkTimeUp = function () {
-  var timerId = setTimeout(function () {
-    this.turn.timer -= 1 * 1000
-    if(this.turn.timeUp()) {
-      changeTimerValue.call(this)
-
-        alert('switch player')
-        clearTimeout(timerId)
-
-        var finnished = this.playersArray.filter(function(player){ return player.played === true }).length === this.playersArray.length ? true : false
-
-        if(finnished){
-          alert('The winner is : ' + this.whoWon())
-        } else {
-          alert('name: ' + this.turn.name)
-          alert('score: ' + this.turn.score)
-          alert('right answears: ' + this.turn.answears)
-
-          this.switchTurn()
-          changeNameValue.call(this)
-          changeTimerValue.call(this)
-        }
-      } else {
-        clearTimeout(timerId)
-        changeTimerValue.call(this)
-        this.checkTimeUp.call(this)
-      }
-  }.bind(this), 1 * 1000)
-  console.log(this.turn.score)
+Game.prototype.clearAllScorerTimeRender = function () {
+  renderSwitchTurn.call(this)
+  changeNameValue.call(this)
+  changeTimerValue.call(this)
+  changeTimerValue.call(this)
+  changeScore.call(this.turn)
 }
 
 function renderPlayer () {
@@ -145,6 +139,45 @@ function renderPlayer () {
   playerElement.style.fontSize = '24px'
 
   document.getElementsByTagName('header')[0].append(playerElement);
+}
+
+function renderSwitchTurn () {
+  var switchTurnButton = document.createElement('a')
+  switchTurnButton.innerHTML = 'Switch turn'
+
+  switchTurnButton.onclick = function (e) {
+    document.getElementsByClassName('notification')[0].remove();
+    e.target.remove()
+    this.configureToStartPlaying()
+  }.bind(this)
+
+  var switchTurnDiv = document.createElement('div')
+  switchTurnDiv.className = 'notification'
+  switchTurnDiv.innerHTML = 'Now is: ' + this.turn.name + "'s turn"
+
+  switchTurnDiv.append(switchTurnButton);
+
+  document.body.append(switchTurnDiv);
+}
+
+function renderWinner () {
+  console.log(this)
+  var switchTurnButton = document.createElement('a')
+  switchTurnButton.innerHTML = 'Play again'
+
+  switchTurnButton.onclick = function (e) {
+    document.getElementsByClassName('notification')[0].remove();
+    e.target.remove()
+    //this.switchTurn()
+  }.bind(this)
+
+  var switchTurnDiv = document.createElement('div')
+  switchTurnDiv.className = 'notification'
+  switchTurnDiv.innerHTML = 'The winner is ' + this.winner.name
+
+  switchTurnDiv.append(switchTurnButton);
+
+  document.body.append(switchTurnDiv);
 }
 
 function changeNameValue () {

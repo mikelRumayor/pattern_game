@@ -226,6 +226,7 @@ function createLineBetweenSpots (selectedSpotId, selectedSpot) {
   line.style.background = 'white'
   line.style.border = '1px solid white'
   line.style.pointerEvents = 'none'
+  line.style.boxShadow = '1px 1px 1px 1px rbga(0, 0, 0, 0.5)'
 
   line.style.transformOrigin = '0 0'
 

@@ -34,7 +34,6 @@ Player.prototype.answear = function (userPattern) {
 }
 
 Player.prototype.rightAnswear = function () {
-  alert(this.patternAnswear)
   if (this.patternAnswear) {
     this.score += 10
     this.answears++
@@ -43,7 +42,6 @@ Player.prototype.rightAnswear = function () {
   } else {
     this.timer -= 5 * 1000
   }
-  alert(this.score)
   changeScore.call(this)
   return this.patternAnswear
 }
