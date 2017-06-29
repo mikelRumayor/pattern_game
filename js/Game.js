@@ -80,6 +80,7 @@ Game.prototype.checkTimeUp = function () {
         this.checkTimeUp.call(this)
       }
   }.bind(this), 1 * 1000)
+  console.log(this.turn.timer)
 }
 
 Game.prototype.createTimer = function () {

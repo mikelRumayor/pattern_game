@@ -43,11 +43,12 @@ Player.prototype.rightAnswear = function () {
     this.timer -= 5 * 1000
   }
   changeScore.call(this)
+  console.log('time changed:', this.timer)
   return this.patternAnswear
 }
 
 Player.prototype.timeUp = function () {
-  if (this.timer === 0) {
+  if (this.timer <= 0) {
     return true
   } else {
     return false

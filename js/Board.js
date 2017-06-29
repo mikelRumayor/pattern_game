@@ -140,28 +140,8 @@ Board.prototype.createBoard = function() {
     flexColumn.className = 'flex-column'
 
     for(var j = 0; j < this.height; j++) {
-      var spotInnerPointer = document.createElement('div')
-      spotInnerPointer.setAttribute('attr-id' ,cont++)
-
-      spotInnerPointer.className = 'spot-inner-pointer'
-
-      var spotInner = document.createElement('div')
-      spotInner.className = 'spot-inner'
-
-      spotInner.append(spotInnerPointer)
-
-      var spot = document.createElement('div')
-      spot.className = 'spot'
-
-      spot.append(spotInner)
-
-      var spotContainer = document.createElement('div')
-      spotContainer.className = 'spot-container'
-
-      spotContainer.append(spot)
-      flexColumn.append(spotContainer)
-      // flexColumn.append(renderSpots(j, cont))
-
+      flexColumn.append(renderSpots(cont))
+      cont++
     }
     flexRow.append(flexColumn)
   }
@@ -282,10 +262,9 @@ function spotClick (e) {
   this.gameDOM.renewScopeVaribles()
 }
 
-function renderSpots (i, cont) {
+function renderSpots (cont) {
   var spotInnerPointer = document.createElement('div')
-  spotInnerPointer.setAttribute('attr-id' ,cont++)
-
+  spotInnerPointer.setAttribute('attr-id' ,cont)
   spotInnerPointer.className = 'spot-inner-pointer'
 
   var spotInner = document.createElement('div')
