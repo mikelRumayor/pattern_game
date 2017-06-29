@@ -91,6 +91,7 @@ Board.prototype.drawPatternInGrid = function (answearsScore) {
   console.log(this.pattern)
   this.pattern.map(function (pointer, i) {
     document.querySelectorAll('div[attr-id]')[pointer].style.opacity = 1
+    blinkSpotAndLines(pointer)
     if (i < this.pattern.length - 1 ) {
       createLineBetweenSpots(i, {x: document.querySelectorAll('div[attr-id]')[pointer].getBoundingClientRect().left + 6, y: document.querySelectorAll('div[attr-id]')[pointer].getBoundingClientRect().top + 5})
       rotateLineBetweenSpots(i, {x: document.querySelectorAll('div[attr-id]')[pointer].getBoundingClientRect().left + 6, y: document.querySelectorAll('div[attr-id]')[pointer].getBoundingClientRect().top + 5}, {x: document.querySelectorAll('div[attr-id]')[this.pattern[i + 1]].getBoundingClientRect().left + 6, y: document.querySelectorAll('div[attr-id]')[this.pattern[i + 1]].getBoundingClientRect().top + 5})
@@ -104,26 +105,23 @@ Board.prototype.removePatternInGrid = function () {
   setTimeout(function(){
     var linesArray = Array.prototype.slice.call(document.querySelectorAll('div.line'))
     var spotCursorArray = Array.prototype.slice.call(document.querySelectorAll('div.spot-inner-pointer'))
+    var spotsArray = Array.prototype.slice.call(document.querySelectorAll('div.spot'))
+    var spotsInnerArray = Array.prototype.slice.call(document.querySelectorAll('div.spot-inner'))
 
     linesArray.map(function(line){
       line.remove()
     })
 
-    spotCursorArray.map(function(spotCursor){
+    spotCursorArray.map(function(spotCursor, index){
       spotCursor.style.opacity = 0
+      spotsArray[index].classList.remove('active')
+      spotsInnerArray[index].classList.remove('active')
     })
+
     this.addEventListenersToSpots()
   }.bind(this), 4 * 1000)
 }
 
-
-Board.prototype.checkLimits = function (i, j) {
-
-
-}
-Board.prototype.generateQueryPattern = function () {
-
-}
 /*********************************************************
 *       Create grid dynamically                          *
 **********************************************************/
@@ -204,7 +202,6 @@ function createLineBetweenSpots (selectedSpotId, selectedSpot) {
   line.style.height = '2px'
   line.style.border = '1px solid white'
   line.style.background = 'white'
-  line.style.border = '1px solid white'
   line.style.pointerEvents = 'none'
   line.style.boxShadow = '1px 1px 1px 1px rbga(0, 0, 0, 0.5)'
 
@@ -283,5 +280,20 @@ function renderSpots (cont) {
   spotContainer.append(spot)
 
   return spotContainer
+}
+
+function blinkSpotAndLines (i) {
+  var spotsInnerPointerArray = Array.prototype.slice.call(document.querySelectorAll('div.spot-inner-pointer'))
+  var spotsArray = Array.prototype.slice.call(document.querySelectorAll('div.spot'))
+  var spotsInnerArray = Array.prototype.slice.call(document.querySelectorAll('div.spot-inner'))
+
+  spotsInnerPointerArray.forEach(function (spot, index) {
+    console.log(i)
+    if (spot.getAttribute('attr-id') == i) {
+      spotsArray[index].classList.add('active')
+      spotsInnerArray[index].classList.add('active')
+    }
+    console.log(spotsArray[index].classList)
+  })
 }
 // module.exports = Board

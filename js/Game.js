@@ -18,7 +18,6 @@ Game.prototype.initializeGame = function () {
 
 Game.prototype.setTurn = function (player) {
   this.turn = player
-
   renderPlayer.call(this)
 }
 
@@ -27,11 +26,19 @@ Game.prototype.whoseTurn = function (){
 }
 
 Game.prototype.configureToStartPlaying = function () {
-  this.turn.startPlaying()
-  this.turn.played = true
+  var cont = 3
+  var intervalId = setInterval(function() {
+    renderInitGame.call(this, cont)
+    if (!cont) {
+      document.getElementsByClassName('notification')[0].remove()
+      clearInterval(intervalId)
+      this.turn.startPlaying()
+      this.turn.played = true
+      this.checkTimeUp()
+    }
+    cont--
 
-  // TODO activte to play
-  this.checkTimeUp()
+  }.bind(this), 1 * 1000)
 }
 
 Game.prototype.switchTurn = function (){
@@ -62,25 +69,22 @@ Game.prototype.checkTimeUp = function () {
     this.turn.timer -= 1 * 1000
     if(this.turn.timeUp()) {
       changeTimerValue.call(this)
+      clearTimeout(timerId)
 
-        clearTimeout(timerId)
+      var finnished = this.playersArray.filter(function(player){ return player.played === true }).length === this.playersArray.length ? true : false
 
-        var finnished = this.playersArray.filter(function(player){ return player.played === true }).length === this.playersArray.length ? true : false
-
-        if(finnished){
-          this.whoWon()
-          renderWinner.call(this)
-        } else {
-          this.switchTurn()
-          this.turn.board.removeEventListenersToSpots()
-        }
+      if(finnished){
+        this.whoWon()
+        renderWinner.call(this)
       } else {
-        clearTimeout(timerId)
-        changeTimerValue.call(this)
-        this.checkTimeUp.call(this)
+        this.switchTurn()
       }
+    } else {
+      clearTimeout(timerId)
+      changeTimerValue.call(this)
+      this.checkTimeUp.call(this)
+    }
   }.bind(this), 1 * 1000)
-  console.log(this.turn.timer)
 }
 
 Game.prototype.createTimer = function () {
@@ -162,7 +166,6 @@ function renderSwitchTurn () {
 }
 
 function renderWinner () {
-  console.log(this)
   var switchTurnButton = document.createElement('a')
   switchTurnButton.innerHTML = 'Play again'
 
@@ -187,4 +190,14 @@ function changeNameValue () {
 
 function changeTimerValue () {
   document.getElementsByClassName('timer')[0].innerHTML = this.turn.timer / 1000
+}
+
+function renderInitGame (timeValue) {
+  document.getElementsByClassName('notification')[0] && document.getElementsByClassName('notification')[0].remove()
+
+  var switchTurnDiv = document.createElement('div')
+  switchTurnDiv.className = 'notification'
+  switchTurnDiv.innerHTML = timeValue
+
+  document.body.append(switchTurnDiv);
 }

@@ -10,6 +10,7 @@ body {
 header{
   background-color: rgba(0 ,0 ,0, 0.8);
   border: 3vh solid rgba(0 ,0 ,0, 0);
+  box-shadow: 1px 1px 250px
 }
 
 header h1{
@@ -31,6 +32,7 @@ header h1{
 .pattern-container {
   background-color: rgba(0 ,0 ,0, 0.8);
   border: 10vh solid rgba(0 ,0 ,0, 0);
+  box-shadow: 1px 1px 250px
 }
 
 .flex-row {
@@ -123,6 +125,7 @@ header h1{
   height: 20vh;
   background-color: rgba(0 ,0 ,0, 0.8);
   border: 5vh solid rgba(0 ,0 ,0, 0);
+  box-shadow: 1px 1px 250px
 }
 .players {
   width: 100%;
@@ -136,9 +139,9 @@ header h1{
 }
 
 .start {
-  height: 1vh;
+  height: 3vh;
   background-color: rgba(0 ,0 ,0, 0.8);
-  border: 3vh solid rgba(0 ,0 ,0, 0);
+  border: 2vh solid rgba(0 ,0 ,0, 0);
   cursor: pointer;
 }
 
@@ -162,6 +165,19 @@ header h1{
   margin: 2% 40%;
   border: 1px solid white;
   cursor: pointer;
+}
+
+@keyframes blink {
+  to {
+     color: red;
+     border-color: red;
+     box-shadow: 1px 1px 1px 1px red;
+  }
+}
+
+.active {
+  color: white;
+  animation: blink 1s steps(2, start) infinite;
 }
 
 #particles-js {
