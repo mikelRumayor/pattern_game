@@ -94,7 +94,6 @@ function initializeGame () {
   game.initializeGame()
 }
 
-
 /**************************************************************************
 *   Trace a line among the selected point in the grid trackcing the mouse *
 **************************************************************************/

@@ -172,7 +172,7 @@ function renderWinner () {
   switchTurnButton.onclick = function (e) {
     document.getElementsByClassName('notification')[0].remove();
     e.target.remove()
-    //this.switchTurn()
+    location.reload()
   }.bind(this)
 
   var switchTurnDiv = document.createElement('div')
