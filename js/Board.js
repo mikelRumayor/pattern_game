@@ -16,7 +16,7 @@ Board.prototype.generatePattern = function (answearsScore) {
   this.userPattern = []
   var patternIndexes = []
   // var randomElements = Math.floor(Math.random() * (this.width * this.height)) + 1
-  randomElements = answearsScore <= 5 ? 2 : Math.floor(Math.random() * (this.width * this.height)) + 1
+  var randomElements = answearsScore <= 1 ? 2 : Math.floor(Math.random() * (this.width * this.height) - 3) + 3
   var patternElement = Math.floor(Math.random() * (this.width * this.height))
   patternIndexes.push(patternElement)
 
@@ -81,14 +81,13 @@ Board.prototype.generatePattern = function (answearsScore) {
     patternIndexes.push(patternElement)
   }
   this.pattern = patternIndexes
-  console.log(this.pattern)
-
+  //console.log(this.pattern)
 }
 
 Board.prototype.drawPatternInGrid = function (answearsScore) {
   this.generatePattern(answearsScore)
 
-  console.log(this.pattern)
+  // console.log(this.pattern)
   this.pattern.map(function (pointer, i) {
     document.querySelectorAll('div[attr-id]')[pointer].style.opacity = 1
     blinkSpotAndLines(pointer, 'showing-pattern')
@@ -172,8 +171,8 @@ Board.prototype.removeEventListenersToSpots = function() {
 }
 
 Board.prototype.comparePatterns = function() {
-  console.log(this.pattern.toString())
-  console.log(this.userPattern.toString())
+  // console.log(this.pattern.toString())
+  // console.log(this.userPattern.toString())
 
   return this.pattern.toString() === this.userPattern.toString() || this.pattern.reverse().toString() === this.userPattern.toString() ? true : false
 }
@@ -187,6 +186,34 @@ Board.prototype.removeBoard = function() {
     line.remove()
   })
 }
+Board.prototype.showResultPatternInGrid = function (patternAnswear) {
+  this.removeEventListenersToSpots()
+
+
+  var linesArray = Array.prototype.slice.call(document.querySelectorAll('div.line'))
+  var spotCursorArray = Array.prototype.slice.call(document.querySelectorAll('div.spot-inner-pointer'))
+
+  linesArray.map(function(line){
+    line.remove()
+  })
+
+  spotCursorArray.map(function(spotCursor, index){
+    spotCursor.style.opacity = 0
+  })
+
+  this.pattern.map(function (pointer, i) {
+    document.querySelectorAll('div[attr-id]')[pointer].style.opacity = 1
+    blinkSpotAndLines(pointer, patternAnswear ? 'good-pattern': 'bad-pattern')
+    document.querySelectorAll('div[attr-id]')[pointer].style.opacity = 1
+    blinkSpotAndLines(pointer, 'showing-pattern')
+    if (i < this.pattern.length - 1 ) {
+      createLineBetweenSpots('good' + i, {x: document.querySelectorAll('div[attr-id]')[pointer].getBoundingClientRect().left + 6, y: document.querySelectorAll('div[attr-id]')[pointer].getBoundingClientRect().top + 5})
+      rotateLineBetweenSpots('good' + i, {x: document.querySelectorAll('div[attr-id]')[pointer].getBoundingClientRect().left + 6, y: document.querySelectorAll('div[attr-id]')[pointer].getBoundingClientRect().top + 5}, {x: document.querySelectorAll('div[attr-id]')[this.pattern[i + 1]].getBoundingClientRect().left + 6, y: document.querySelectorAll('div[attr-id]')[this.pattern[i + 1]].getBoundingClientRect().top + 5})
+    }
+
+  }.bind(this))
+}
+
 
 /************************************************************************
 *   Create line to join the dots and create the pattern                 *
@@ -243,8 +270,7 @@ function rotateLineBetweenSpots (id, origin, target) {
 function spotMouseOver (e) {
   this.gameDOM.selectedSpot.x = e.pageX + 10 / 2
   this.gameDOM.selectedSpot.y = e.pageY + 10 / 2
-  console.log(e.target.style)
-  // TODO check what happends with the reference of the object
+  //console.log(e.target.style)
   e.target.style.opacity = 1
 
   createLineBetweenSpots(this.gameDOM.selectedSpotId, this.gameDOM.selectedSpot)
@@ -292,7 +318,7 @@ function blinkSpotAndLines (i, className) {
       spotsArray[index].classList.add(className)
       spotsInnerArray[index].classList.add(className)
     }
-    console.log(spotsArray[index].classList)
+    // console.log(spotsArray[index].classList)
   })
 }
 // module.exports = Board

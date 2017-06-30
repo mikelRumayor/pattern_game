@@ -28,20 +28,32 @@ Player.prototype.answear = function (userPattern) {
   this.board.setUserPattern(userPattern)
   this.patternAnswear = this.board.comparePatterns()
   this.rightAnswear()
-  this.board.removeEventListenersToSpots()
+  this.board.showResultPatternInGrid(this.patternAnswear)
+
+  /*
+  var linesArray = Array.prototype.slice.call(document.querySelectorAll('div.line'))
+  var spotCursorArray = Array.prototype.slice.call(document.querySelectorAll('div.spot-inner-pointer'))
+
+  linesArray.map(function(line){
+    line.remove()
+  })
+
+  spotCursorArray.map(function(spotCursor, index){
+    spotCursor.style.opacity = 0
+  })
 
   this.board.pattern.map(function (pointer, i) {
     document.querySelectorAll('div[attr-id]')[pointer].style.opacity = 1
     blinkSpotAndLines(pointer, this.patternAnswear ? 'good-pattern': 'bad-pattern')
-    if (!this.patternAnswear) {
-      document.querySelectorAll('div[attr-id]')[pointer].style.opacity = 1
-      blinkSpotAndLines(pointer, 'showing-pattern')
-      if (i < this.board.pattern.length - 1 ) {
-        createLineBetweenSpots('good' + i, {x: document.querySelectorAll('div[attr-id]')[pointer].getBoundingClientRect().left + 6, y: document.querySelectorAll('div[attr-id]')[pointer].getBoundingClientRect().top + 5})
-        rotateLineBetweenSpots('good' + i, {x: document.querySelectorAll('div[attr-id]')[pointer].getBoundingClientRect().left + 6, y: document.querySelectorAll('div[attr-id]')[pointer].getBoundingClientRect().top + 5}, {x: document.querySelectorAll('div[attr-id]')[this.board.pattern[i + 1]].getBoundingClientRect().left + 6, y: document.querySelectorAll('div[attr-id]')[this.board.pattern[i + 1]].getBoundingClientRect().top + 5})
-      }
+    document.querySelectorAll('div[attr-id]')[pointer].style.opacity = 1
+    blinkSpotAndLines(pointer, 'showing-pattern')
+
+    if (i < this.board.pattern.length - 1 ) {
+      createLineBetweenSpots('good' + i, {x: document.querySelectorAll('div[attr-id]')[pointer].getBoundingClientRect().left + 6, y: document.querySelectorAll('div[attr-id]')[pointer].getBoundingClientRect().top + 5})
+      rotateLineBetweenSpots('good' + i, {x: document.querySelectorAll('div[attr-id]')[pointer].getBoundingClientRect().left + 6, y: document.querySelectorAll('div[attr-id]')[pointer].getBoundingClientRect().top + 5}, {x: document.querySelectorAll('div[attr-id]')[this.board.pattern[i + 1]].getBoundingClientRect().left + 6, y: document.querySelectorAll('div[attr-id]')[this.board.pattern[i + 1]].getBoundingClientRect().top + 5})
     }
-  }.bind(this))
+
+  }.bind(this))*/
 
   var cont = 2
   var intervalId = setInterval(function() {

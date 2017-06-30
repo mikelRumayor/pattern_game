@@ -43,7 +43,7 @@ Game.prototype.configureToStartPlaying = function () {
 
 Game.prototype.switchTurn = function (){
   this.playersArray.forEach(function (player) {
-      if(this.turn.name !== player.name) {
+      if(this.turn.id !== player.id) {
         this.turn = player
       }
   }.bind(this))
